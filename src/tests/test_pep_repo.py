@@ -51,10 +51,14 @@ _OBJ_CODE = '123'
 _FUNC_CODE = '1234'
 
 
-def dummy_pep_200(ssn=_SSN):
+def dummy_pep_200(ssn=_SSN,
+                  obj_code=_OBJ_CODE,
+                  func_code=_FUNC_CODE):
     # Generates a dummy row of PEP data that can be inserted into a PepRepo
     line = ' ' * 103  # Start with all blanks of appropriate length
     line = str_insert(line, ssn, 20)
+    line = str_insert(line, obj_code, 37)
+    line = str_insert(line, func_code, 40)
     return line
 
 
@@ -76,6 +80,7 @@ class TestPepRepo(unittest.TestCase):
     def setUp(self):
         self.repo = PepRepo()
         self.repo.add_100(dummy_pep_100())
+        self.repo.add_200(dummy_pep_200())
 
     def test_get_100(self):
         self.repo = PepRepo()
@@ -134,3 +139,9 @@ class TestPepRepo(unittest.TestCase):
 
     def test_get_cert_exc_code(self):
         self.assertEqual(_CERT_EXC_CODE, self.repo.get_cert_exc_code(_SSN))
+
+    def test_get_obj_code(self):
+        self.assertEqual(_OBJ_CODE, self.repo.get_obj_code(_SSN))
+
+    def test_get_func_code(self):
+        self.assertEqual(_FUNC_CODE, self.repo.get_func_code(_SSN))

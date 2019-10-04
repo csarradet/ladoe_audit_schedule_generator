@@ -57,3 +57,10 @@ class PepRepo(object):
 
     def get_cert_exc_code(self, key):
         return self.get_100(key)[95:96]
+
+    def get_obj_code(self, key):
+        return self.get_200(key)[37:40]
+
+    def get_func_code(self, key):
+        return self.get_200(key)[40:44]
+        
