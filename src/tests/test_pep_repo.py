@@ -31,7 +31,7 @@ def dummy_pep_100(ssn=_SSN,
                   pip_salary=_PIP_SALARY,
                   retiree_code=_RETIREE_CODE,
                   cert_exc_code=_CERT_EXC_CODE):
-    # Generates a dummy row of PEP 100 data that can be inserted into a PepRepo
+    # Generates a dummy row of PEP data that can be inserted into a PepRepo
     line = " " * 188  # Start with all blanks of appropriate length
     line = str_insert(line, ssn, 20)
     line = str_insert(line, name, 29)
@@ -44,6 +44,17 @@ def dummy_pep_100(ssn=_SSN,
     line = str_insert(line, pip_salary, 104)
     line = str_insert(line, retiree_code, 100)
     line = str_insert(line, cert_exc_code, 95)
+    return line
+
+
+_OBJ_CODE = '123'
+_FUNC_CODE = '1234'
+
+
+def dummy_pep_200(ssn=_SSN):
+    # Generates a dummy row of PEP data that can be inserted into a PepRepo
+    line = ' ' * 103  # Start with all blanks of appropriate length
+    line = str_insert(line, ssn, 20)
     return line
 
 
@@ -72,6 +83,27 @@ class TestPepRepo(unittest.TestCase):
         self.repo.add_100(rec)
         found = self.repo.get_100(_SSN)
         self.assertEqual(found, rec)
+
+    def test_get_200(self):
+        self.repo = PepRepo()
+        rec = dummy_pep_200()
+        self.repo.add_200(rec)
+        found = self.repo.get_200(_SSN)
+        self.assertEqual(found, rec)
+
+    def test_get_200s(self):
+        self.repo = PepRepo()
+        rec = dummy_pep_200()
+        self.repo.add_200(rec)
+        found = self.repo.get_200s(_SSN)
+        self.assertEqual(len(found), 1)
+        self.assertEqual(found[0], rec)
+
+        self.repo.add_200(rec)
+        found = self.repo.get_200s(_SSN)
+        self.assertEqual(len(found), 2)
+        self.assertEqual(found[0], rec)
+        self.assertEqual(found[1], rec)
 
     def test_get_name(self):
         self.assertEqual(_NAME, self.repo.get_name(_SSN))
