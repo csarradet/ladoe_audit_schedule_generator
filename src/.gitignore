@@ -1,0 +1,3 @@
+*.pyc
+*.csv
+client_secrets.py
