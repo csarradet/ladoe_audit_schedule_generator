@@ -15,3 +15,30 @@ class PepRepo(object):
 
     def get_name(self, key):
         return self.get_100(key)[29:82]
+
+    def get_years_xp(self, key):
+        return self.get_100(key)[98:100]
+
+    def get_cert_num(self, key):
+        return self.get_100(key)[88:94]
+
+    def get_cert_type(self, key):
+        return self.get_100(key)[84:88]
+
+    def get_ed_level(self, key):
+        return self.get_100(key)[96:98]
+
+    def get_days_employed(self, key):
+        return self.get_100(key)[119:124]
+
+    def get_emp_type(self, key):
+        return self.get_100(key)[118:119]
+
+    def get_pip_salary(self, key):
+        return int(self.get_100(key)[104:110])
+
+    def get_retiree_code(self, key):
+        return self.get_100(key)[100:102]
+
+    def get_cert_exc_code(self, key):
+        return self.get_100(key)[95:96]
