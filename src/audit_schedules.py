@@ -19,7 +19,16 @@ def get_schedule_2_recs(repo):
     keys = repo.get_all_keys()
     for key in keys:
         # Any invalid salaries may indicate a damaged file, error out
+        obj_code = repo.get_obj_code(key)
+        func_code = repo.get_func_code(key)
+        obj_func = f'{obj_code}.{func_code}'
         repo.validate_salary(key)
+
+        if not (obj_func == '111.2410' or
+                obj_func == '111.2420' or
+                obj_code == '112'):
+            continue  # Not an admin or teacher, skip
+
         rec = {}
         rec['name'] = repo.get_name(key)
         rec['ssn'] = key
@@ -37,6 +46,10 @@ def get_schedule_5_recs(repo):
     output = []
     keys = repo.get_all_keys()
     for key in keys:
+        obj_code = repo.get_obj_code(key)
+        if not obj_code == '112':
+            continue  # Not a teacher, skip
+
         rec = {}
         rec['name'] = repo.get_name(key)
         rec['ssn'] = key

@@ -264,7 +264,7 @@ class TestPepRepo(unittest.TestCase):
 class TestPepSalaries(unittest.TestCase):
     def setUp(self):
         # Basic data pulls already covered, just testing sums/diffs here
-        salary_100 = dummy_pep_100(pip_salary='000001', total_salary_amt='001111')
+        salary_100 = dummy_pep_100(pip_salary='000001', total_salary_amt='001110')
         salary_200_a = dummy_pep_200(
             amt_1='001000', fund_1='xx', type_1='1',
             amt_2='000100', fund_2='xx', type_2='2')
@@ -290,7 +290,7 @@ class TestPepSalaries(unittest.TestCase):
 
     def test_get_total_salary(self):
         found = self.repo.get_total_salary_amount(_SSN)
-        self.assertEqual(found, 1111)
+        self.assertEqual(found, 1110)
 
     def test_validate_salary(self):
         # Recs are valid, no throw
