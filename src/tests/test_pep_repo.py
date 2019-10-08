@@ -262,6 +262,7 @@ class TestPepSalaries(unittest.TestCase):
             amt_2='000100', fund_2='xx', type_2='2')
         salary_200_b = dummy_pep_200(
             amt_1='000010', fund_1='xx', type_1='x')
+        self.salary_200_b = salary_200_b
         self.repo = PepRepo()
         self.repo.add_100(salary_100)
         self.repo.add_200(salary_200_a)
@@ -283,12 +284,11 @@ class TestPepSalaries(unittest.TestCase):
         found = self.repo.get_total_salary_amount(_SSN)
         self.assertEqual(found, 1111)
 
-    def test_validate_salary_sums(self):
-        total_sal = self.repo.get_total_salary_amount(_SSN)
-        pip_sal = self.repo.get_pip_salary(_SSN)
-        extra_sal = self.repo.get_extra_compensation(_SSN)
-        base_sal = self.repo.get_base_salary(_SSN)
+    def test_validate_salary(self):
+        # Recs are valid, no throw
+        self.repo.validate_salary(_SSN)
 
-        self.assertEqual(total_sal, 1111)
-        self.assertEqual(base_sal, 1000)
-        self.assertEqual(total_sal - pip_sal - extra_sal, base_sal)
+        # Re-import one of the 200 recs to throw off the total
+        self.repo.add_200(self.salary_200_b)
+        with self.assertRaises(ValueError):
+            self.repo.validate_salary(_SSN)

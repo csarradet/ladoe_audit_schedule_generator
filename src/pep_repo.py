@@ -105,3 +105,13 @@ class PepRepo(object):
     def get_base_salary(self, key):
         base_occs = [x for x in self._get_all_occs(key) if x.stype == '1']
         return sum(x.amount for x in base_occs)
+
+    def validate_salary(self, key):
+        total_sal = self.get_total_salary_amount(key)
+        pip_sal = self.get_pip_salary(key)
+        extra_sal = self.get_extra_compensation(key)
+        base_sal = self.get_base_salary(key)
+        sum_total_sal = pip_sal + extra_sal + base_sal
+
+        if total_sal != sum_total_sal:
+            raise ValueError(f'Inconsistent PEP records for {key} - total salary {total_sal} does not equal sum of PEP200 salary records {sum_total_sal}')
