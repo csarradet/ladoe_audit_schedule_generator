@@ -1,5 +1,7 @@
 import unittest
-from pep_repo import PepRepo
+from pep_repo import (PepRepo,
+                      SalaryOcc,
+                      generate_salary_occs)
 
 
 def str_insert(original_str, new_text, starting_pos):
@@ -49,16 +51,60 @@ def dummy_pep_100(ssn=_SSN,
 
 _OBJ_CODE = '123'
 _FUNC_CODE = '1234'
+_AMT = '000000'
+_AMT_INT = 0
+_FUND = '11'
+_STYPE = '2'
 
 
 def dummy_pep_200(ssn=_SSN,
                   obj_code=_OBJ_CODE,
-                  func_code=_FUNC_CODE):
+                  func_code=_FUNC_CODE,
+                  amt_1=_AMT,
+                  fund_1=_FUND,
+                  type_1=_STYPE,
+
+                  amt_2=_AMT,
+                  fund_2=_FUND,
+                  type_2=_STYPE,
+
+                  amt_3=_AMT,
+                  fund_3=_FUND,
+                  type_3=_STYPE,
+
+                  amt_4=_AMT,
+                  fund_4=_FUND,
+                  type_4=_STYPE,
+
+                  amt_5=_AMT,
+                  fund_5=_FUND,
+                  type_5=_STYPE):
     # Generates a dummy row of PEP data that can be inserted into a PepRepo
     line = ' ' * 103  # Start with all blanks of appropriate length
     line = str_insert(line, ssn, 20)
     line = str_insert(line, obj_code, 37)
     line = str_insert(line, func_code, 40)
+    # Salary data is repeated 5 times for each 200 rec: (amount, fund, type)
+    line = str_insert(line, amt_1, 58)
+    line = str_insert(line, fund_1, 64)
+    line = str_insert(line, type_1, 66)
+
+    line = str_insert(line, amt_2, 67)
+    line = str_insert(line, fund_2, 73)
+    line = str_insert(line, type_2, 75)
+
+    line = str_insert(line, amt_3, 76)
+    line = str_insert(line, fund_3, 82)
+    line = str_insert(line, type_3, 84)
+
+    line = str_insert(line, amt_4, 85)
+    line = str_insert(line, fund_4, 91)
+    line = str_insert(line, type_4, 93)
+
+    line = str_insert(line, amt_5, 94)
+    line = str_insert(line, fund_5, 100)
+    line = str_insert(line, type_5, 102)
+
     return line
 
 
@@ -74,6 +120,58 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(new_t, 'foobarNEW')
         new_t = str_insert(t, 'NEW', len(t))
         self.assertEqual(new_t, 'foobarbazNEW')
+
+
+class TestSalaryOccs(unittest.TestCase):
+    def test_assert(self):
+        # No salary occs generated for zero amounts
+        rec = dummy_pep_200()
+        found = generate_salary_occs(rec)
+        self.assertFalse(found)
+
+        # Test single entries for each possible spot in the 200 rec
+        nonzero_amt = '123456'
+        nonzero_amt_int = int(nonzero_amt)
+
+        rec1 = dummy_pep_200(amt_1=nonzero_amt)
+        found = generate_salary_occs(rec1)
+        self.assertEqual(len(found), 1)
+        self.assertEqual(found[0].amount, nonzero_amt_int)
+
+        rec2 = dummy_pep_200(amt_2=nonzero_amt)
+        found = generate_salary_occs(rec2)
+        self.assertEqual(len(found), 1)
+        self.assertEqual(found[0].amount, nonzero_amt_int)
+
+        rec3 = dummy_pep_200(amt_3=nonzero_amt)
+        found = generate_salary_occs(rec3)
+        self.assertEqual(len(found), 1)
+        self.assertEqual(found[0].amount, nonzero_amt_int)
+
+        rec4 = dummy_pep_200(amt_4=nonzero_amt)
+        found = generate_salary_occs(rec4)
+        self.assertEqual(len(found), 1)
+        self.assertEqual(found[0].amount, nonzero_amt_int)
+
+        rec5 = dummy_pep_200(amt_5=nonzero_amt)
+        found = generate_salary_occs(rec5)
+        self.assertEqual(len(found), 1)
+        self.assertEqual(found[0].amount, nonzero_amt_int)
+
+        # Multiple amounts
+        rec12 = dummy_pep_200(amt_1=nonzero_amt, amt_2=nonzero_amt)
+        found = generate_salary_occs(rec12)
+        self.assertEqual(len(found), 2)
+        self.assertEqual(found[0].amount, nonzero_amt_int)
+        self.assertEqual(found[1].amount, nonzero_amt_int)
+
+        # All possible amounts filled out
+        rec12345 = dummy_pep_200(amt_1=nonzero_amt, amt_2=nonzero_amt,
+            amt_3=nonzero_amt, amt_4=nonzero_amt, amt_5=nonzero_amt)
+        found = generate_salary_occs(rec12345)
+        self.assertEqual(len(found), 5)
+        for i in range(5):
+            self.assertEqual(found[i].amount, nonzero_amt_int)
 
 
 class TestPepRepo(unittest.TestCase):
