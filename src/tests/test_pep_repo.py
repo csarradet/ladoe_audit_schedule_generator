@@ -20,6 +20,8 @@ _PIP_SALARY = '100100'
 _PIP_SALARY_INT = int(_PIP_SALARY)
 _RETIREE_CODE = '01'
 _CERT_EXC_CODE = '5'
+_TOTAL_SALARY_AMT = _PIP_SALARY
+_TOTAL_SALARY_AMT_INT = _PIP_SALARY_INT
 
 
 def dummy_pep_100(ssn=_SSN,
@@ -32,7 +34,8 @@ def dummy_pep_100(ssn=_SSN,
                   emp_type=_EMP_TYPE,
                   pip_salary=_PIP_SALARY,
                   retiree_code=_RETIREE_CODE,
-                  cert_exc_code=_CERT_EXC_CODE):
+                  cert_exc_code=_CERT_EXC_CODE,
+                  total_salary_amt=_TOTAL_SALARY_AMT):
     # Generates a dummy row of PEP data that can be inserted into a PepRepo
     line = " " * 188  # Start with all blanks of appropriate length
     line = str_insert(line, ssn, 20)
@@ -46,12 +49,13 @@ def dummy_pep_100(ssn=_SSN,
     line = str_insert(line, pip_salary, 104)
     line = str_insert(line, retiree_code, 100)
     line = str_insert(line, cert_exc_code, 95)
+    line = str_insert(line, total_salary_amt, 110)
     return line
 
 
 _OBJ_CODE = '123'
 _FUNC_CODE = '1234'
-_AMT = '000000'
+_AMT = '0' * 6
 _AMT_INT = 0
 _FUND = '11'
 _STYPE = '2'
@@ -243,3 +247,48 @@ class TestPepRepo(unittest.TestCase):
 
     def test_get_func_code(self):
         self.assertEqual(_FUNC_CODE, self.repo.get_func_code(_SSN))
+
+    def test_get_total_salary_amount(self):
+        self.assertEqual(_TOTAL_SALARY_AMT_INT,
+            self.repo.get_total_salary_amount(_SSN))
+
+
+class TestPepSalaries(unittest.TestCase):
+    def setUp(self):
+        # Basic data pulls already covered, just testing sums/diffs here
+        salary_100 = dummy_pep_100(pip_salary='000001', total_salary_amt='001111')
+        salary_200_a = dummy_pep_200(
+            amt_1='001000', fund_1='xx', type_1='1',
+            amt_2='000100', fund_2='xx', type_2='2')
+        salary_200_b = dummy_pep_200(
+            amt_1='000010', fund_1='xx', type_1='x')
+        self.repo = PepRepo()
+        self.repo.add_100(salary_100)
+        self.repo.add_200(salary_200_a)
+        self.repo.add_200(salary_200_b)
+
+    def test_get_all_occs(self):
+        found = self.repo._get_all_occs(_SSN)
+        self.assertEqual(len(found), 3)
+
+    def test_get_extra_comp(self):
+        found = self.repo.get_extra_compensation(_SSN)
+        self.assertEqual(found, 110)
+
+    def test_get_base_salary(self):
+        found = self.repo.get_base_salary(_SSN)
+        self.assertEqual(found, 1000)
+
+    def test_get_total_salary(self):
+        found = self.repo.get_total_salary_amount(_SSN)
+        self.assertEqual(found, 1111)
+
+    def test_validate_salary_sums(self):
+        total_sal = self.repo.get_total_salary_amount(_SSN)
+        pip_sal = self.repo.get_pip_salary(_SSN)
+        extra_sal = self.repo.get_extra_compensation(_SSN)
+        base_sal = self.repo.get_base_salary(_SSN)
+
+        self.assertEqual(total_sal, 1111)
+        self.assertEqual(base_sal, 1000)
+        self.assertEqual(total_sal - pip_sal - extra_sal, base_sal)

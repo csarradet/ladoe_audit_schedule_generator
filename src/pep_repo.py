@@ -6,13 +6,14 @@ class SalaryOcc(object):
     # Represents one non-zero salary occurrence sourced from a 200 file
     def __init__(self, amount, fund, stype):
         self.amount = amount  # int
-        self.fund = fund
-        self.stype = stype
+        self.fund = fund  # str
+        self.stype = stype  # str
 
 
 def generate_salary_occs(pep200_rec):
     output = []
-    # Start:end string slicing args to extract amt/fund/type, one for each of the five possibles
+    # Start:end string slicing args to extract amt/fund/type from a 200 rec,
+    # one for each of the five possible locations
     slices = [(58, 64, 64, 66, 66, 67),
               (67, 73, 73, 75, 75, 76),
               (76, 82, 82, 84, 84, 85),
@@ -88,3 +89,19 @@ class PepRepo(object):
     def get_func_code(self, key):
         return self.get_200(key)[40:44]
 
+    def get_total_salary_amount(self, key):
+        return int(self.get_100(key)[110:116])
+
+    def _get_all_occs(self, key):
+        occs = []
+        for i in self.get_200s(key):
+            occs += generate_salary_occs(i)
+        return occs
+
+    def get_extra_compensation(self, key):
+        extra_occs = [x for x in self._get_all_occs(key) if x.stype != '1']
+        return sum(x.amount for x in extra_occs)
+
+    def get_base_salary(self, key):
+        base_occs = [x for x in self._get_all_occs(key) if x.stype == '1']
+        return sum(x.amount for x in base_occs)
