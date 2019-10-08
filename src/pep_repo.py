@@ -14,11 +14,11 @@ def generate_salary_occs(pep200_rec):
     output = []
     # Start:end string slicing args to extract amt/fund/type from a 200 rec,
     # one for each of the five possible locations
-    slices = [(58, 64, 64, 66, 66, 67),
-              (67, 73, 73, 75, 75, 76),
-              (76, 82, 82, 84, 84, 85),
-              (85, 91, 91, 93, 93, 94),
-              (94, 100, 100, 102, 102, 103)]
+    slices = [(57, 63, 63, 65, 65, 66),
+              (66, 72, 72, 74, 74, 75),
+              (75, 81, 81, 83, 83, 84),
+              (84, 90, 90, 92, 92, 93),
+              (93, 99, 99, 101, 101, 102)]
     for i in slices:
         amount = int(pep200_rec[i[0]:i[1]])
         fund = pep200_rec[i[2]:i[3]]
@@ -37,7 +37,7 @@ class PepRepo(object):
 
     def add_100(self, row):
         # 1:1 mapping for 100 records, keep only the most recent
-        key = row[20:29]  # SSN
+        key = row[19:28]  # SSN
         self.store_100[key] = row
 
     def add_100s(self, rows):
@@ -46,7 +46,7 @@ class PepRepo(object):
 
     def add_200(self, row):
         # 1:many for 200 records, storing them as a list keyed by SSN
-        key = row[20:29]  # SSN
+        key = row[19:28]  # SSN
         self.store_200s[key].append(row)
 
     def add_200s(self, rows):
@@ -69,43 +69,43 @@ class PepRepo(object):
         return list(self.store_100)
 
     def get_name(self, key):
-        return self.get_100(key)[29:82]
+        return self.get_100(key)[28:81]
 
     def get_years_xp(self, key):
-        return self.get_100(key)[98:100]
+        return self.get_100(key)[97:99]
 
     def get_cert_num(self, key):
-        return self.get_100(key)[88:94]
+        return self.get_100(key)[87:93]
 
     def get_cert_type(self, key):
-        return self.get_100(key)[84:88]
+        return self.get_100(key)[83:87]
 
     def get_ed_level(self, key):
-        return self.get_100(key)[96:98]
+        return self.get_100(key)[95:97]
 
     def get_days_employed(self, key):
-        return self.get_100(key)[119:124]
+        return self.get_100(key)[118:123]
 
     def get_emp_type(self, key):
-        return self.get_100(key)[118:119]
+        return self.get_100(key)[117:118]
 
     def get_pip_salary(self, key):
-        return int(self.get_100(key)[104:110])
+        return int(self.get_100(key)[103:109])
 
     def get_retiree_code(self, key):
-        return self.get_100(key)[100:102]
+        return self.get_100(key)[99:101]
 
     def get_cert_exc_code(self, key):
-        return self.get_100(key)[95:96]
+        return self.get_100(key)[94:95]
 
     def get_obj_code(self, key):
-        return self.get_200(key)[37:40]
+        return self.get_200(key)[36:39]
 
     def get_func_code(self, key):
-        return self.get_200(key)[40:44]
+        return self.get_200(key)[39:43]
 
     def get_total_salary_amount(self, key):
-        return int(self.get_100(key)[110:116])
+        return int(self.get_100(key)[109:115])
 
     def _get_all_occs(self, key):
         occs = []

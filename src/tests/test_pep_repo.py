@@ -37,18 +37,18 @@ def dummy_pep_100(ssn=_SSN,
                   total_salary_amt=_TOTAL_SALARY_AMT):
     # Generates a dummy row of PEP data that can be inserted into a PepRepo
     line = " " * 188  # Start with all blanks of appropriate length
-    line = str_insert(line, ssn, 20)
-    line = str_insert(line, name, 29)
-    line = str_insert(line, years_xp, 98)
-    line = str_insert(line, cert_num, 88)
-    line = str_insert(line, cert_type, 84)
-    line = str_insert(line, ed_level, 96)
-    line = str_insert(line, days_employed, 119)
-    line = str_insert(line, emp_type, 118)
-    line = str_insert(line, pip_salary, 104)
-    line = str_insert(line, retiree_code, 100)
-    line = str_insert(line, cert_exc_code, 95)
-    line = str_insert(line, total_salary_amt, 110)
+    line = str_insert(line, ssn, 19)
+    line = str_insert(line, name, 28)
+    line = str_insert(line, years_xp, 97)
+    line = str_insert(line, cert_num, 87)
+    line = str_insert(line, cert_type, 83)
+    line = str_insert(line, ed_level, 95)
+    line = str_insert(line, days_employed, 118)
+    line = str_insert(line, emp_type, 117)
+    line = str_insert(line, pip_salary, 103)
+    line = str_insert(line, retiree_code, 99)
+    line = str_insert(line, cert_exc_code, 94)
+    line = str_insert(line, total_salary_amt, 109)
     return line
 
 
@@ -84,29 +84,29 @@ def dummy_pep_200(ssn=_SSN,
                   type_5=_STYPE):
     # Generates a dummy row of PEP data that can be inserted into a PepRepo
     line = ' ' * 103  # Start with all blanks of appropriate length
-    line = str_insert(line, ssn, 20)
-    line = str_insert(line, obj_code, 37)
-    line = str_insert(line, func_code, 40)
+    line = str_insert(line, ssn, 19)
+    line = str_insert(line, obj_code, 36)
+    line = str_insert(line, func_code, 39)
     # Salary data is repeated 5 times for each 200 rec: (amount, fund, type)
-    line = str_insert(line, amt_1, 58)
-    line = str_insert(line, fund_1, 64)
-    line = str_insert(line, type_1, 66)
+    line = str_insert(line, amt_1, 57)
+    line = str_insert(line, fund_1, 63)
+    line = str_insert(line, type_1, 65)
 
-    line = str_insert(line, amt_2, 67)
-    line = str_insert(line, fund_2, 73)
-    line = str_insert(line, type_2, 75)
+    line = str_insert(line, amt_2, 66)
+    line = str_insert(line, fund_2, 72)
+    line = str_insert(line, type_2, 74)
 
-    line = str_insert(line, amt_3, 76)
-    line = str_insert(line, fund_3, 82)
-    line = str_insert(line, type_3, 84)
+    line = str_insert(line, amt_3, 75)
+    line = str_insert(line, fund_3, 81)
+    line = str_insert(line, type_3, 83)
 
-    line = str_insert(line, amt_4, 85)
-    line = str_insert(line, fund_4, 91)
-    line = str_insert(line, type_4, 93)
+    line = str_insert(line, amt_4, 84)
+    line = str_insert(line, fund_4, 90)
+    line = str_insert(line, type_4, 92)
 
-    line = str_insert(line, amt_5, 94)
-    line = str_insert(line, fund_5, 100)
-    line = str_insert(line, type_5, 102)
+    line = str_insert(line, amt_5, 93)
+    line = str_insert(line, fund_5, 99)
+    line = str_insert(line, type_5, 101)
 
     return line
 
