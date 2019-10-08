@@ -74,7 +74,7 @@ def write_output_files(schedule_2, schedule_5, output_dir):
 
 
 def write_output_file(records, headers, filename, output_dir):
-    with open(os.path.join(output_dir, filename), 'w') as csvfile:
+    with open(os.path.join(output_dir, filename), 'w', newline='') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=headers)
         writer.writeheader()
         for i in records:
@@ -97,7 +97,6 @@ if __name__ == '__main__':
         repo.add_100(i)
     for i in pep_200_recs:
         repo.add_200(i)
-    print(f'Repo state: {repo.to_str()}')
 
     schedule_2 = get_schedule_2_recs(repo)
     schedule_5 = get_schedule_5_recs(repo)
