@@ -1,6 +1,5 @@
 import unittest
 from pep_repo import (PepRepo,
-                      SalaryOcc,
                       generate_salary_occs)
 
 
