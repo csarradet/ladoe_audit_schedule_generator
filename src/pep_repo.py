@@ -32,15 +32,26 @@ class PepRepo(object):
         self.store_100 = {}
         self.store_200s = defaultdict(list)
 
+    def to_str(self):
+        return f'100s: {str(self.store_100)}' + '\n' + f'200s: {str(self.store_200s)}'
+
     def add_100(self, row):
         # 1:1 mapping for 100 records, keep only the most recent
         key = row[20:29]  # SSN
         self.store_100[key] = row
 
+    def add_100s(self, rows):
+        for i in rows:
+            self.add_100(i)
+
     def add_200(self, row):
         # 1:many for 200 records, storing them as a list keyed by SSN
         key = row[20:29]  # SSN
         self.store_200s[key].append(row)
+
+    def add_200s(self, rows):
+        for i in rows:
+            self.add_200(i)
 
     def get_100(self, key):
         return self.store_100[key]
@@ -52,6 +63,10 @@ class PepRepo(object):
     def get_200s(self, key):
         # Returns all 200 records inserted for that SSN
         return self.store_200s[key]
+
+    def get_all_keys(self):
+        # Returns all IDs passed in from 100 records
+        return list(self.store_100)
 
     def get_name(self, key):
         return self.get_100(key)[29:82]

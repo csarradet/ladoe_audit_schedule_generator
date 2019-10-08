@@ -126,7 +126,7 @@ class TestUtils(unittest.TestCase):
 
 
 class TestSalaryOccs(unittest.TestCase):
-    def test_assert(self):
+    def test_salary_occs(self):
         # No salary occs generated for zero amounts
         rec = dummy_pep_200()
         found = generate_salary_occs(rec)
@@ -210,6 +210,15 @@ class TestPepRepo(unittest.TestCase):
         self.assertEqual(len(found), 2)
         self.assertEqual(found[0], rec)
         self.assertEqual(found[1], rec)
+
+    def test_get_all_keys(self):
+        self.repo = PepRepo()
+        ssns = ['123456789', '987654321']
+        recs = [dummy_pep_100(ssn=ssns[0]), dummy_pep_100(ssn=ssns[1])]
+        self.repo.add_100s(recs)
+        found = self.repo.get_all_keys()
+        self.assertEqual(len(found), 2)
+        self.assertEqual(found, ssns)
 
     def test_get_name(self):
         self.assertEqual(_NAME, self.repo.get_name(_SSN))
